@@ -3,227 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ServerVault | Discover Your Community</title>
+    <title>Discord Ads | Premium Server Directory</title>
     <style>
-        /* CSS VARIABLES - Easy to change themes */
         :root {
-            --discord-blurple: #5865F2;
-            --bg-dark: #0f0f13;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --text-main: #ffffff;
-            --text-muted: #b9bbbe;
-            --accent: #00d2ff;
+            --blurple: #5865F2;
+            --dark: #0f1014;
+            --card-bg: #1e1f24;
+            --text: #ffffff;
+            --muted: #949ba4;
         }
 
-        /* RESET & BASE STYLES */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { 
-            background-color: var(--bg-dark); 
-            color: var(--text-main);
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        /* LOW-END PC OPTIMIZATION: Simple gradient instead of video/heavy image */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% -20%, #2c2f33 0%, #0f0f13 80%);
-            z-index: -1;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--dark); color: var(--text); overflow-x: hidden; }
 
         /* NAVIGATION */
         nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 10%;
-            background: rgba(0,0,0,0.2);
-            backdrop-filter: blur(10px); /* Smooth transparency effect */
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 5%; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #2d2f35;
         }
+        .logo { font-weight: 900; font-size: 1.4rem; color: var(--blurple); text-transform: uppercase; }
 
-        .logo { font-weight: 800; font-size: 1.5rem; color: var(--discord-blurple); letter-spacing: -1px; }
-
-        /* HERO SECTION */
-        header {
+        /* FEATURED SECTION (YOUR SERVER) */
+        .hero {
+            padding: 4rem 5%;
+            background: linear-gradient(180deg, rgba(88, 101, 242, 0.1) 0%, var(--dark) 100%);
             text-align: center;
-            padding: 6rem 10% 4rem;
         }
-
-        header h1 { font-size: 3rem; margin-bottom: 1rem; }
-        header p { color: var(--text-muted); font-size: 1.2rem; max-width: 600px; margin: 0 auto 2rem; }
-
-        /* INTERACTIVE SEARCH */
-        .search-container {
-            margin-bottom: 3rem;
+        .hero h1 { font-size: 3.5rem; margin-bottom: 1rem; letter-spacing: -2px; }
+        .featured-card {
+            max-width: 800px; margin: 2rem auto;
+            background: var(--card-bg); border-radius: 15px;
+            border: 2px solid var(--blurple); overflow: hidden;
+            display: flex; flex-wrap: wrap; transition: 0.3s;
         }
-        input[type="text"] {
-            width: 100%;
-            max-width: 500px;
-            padding: 12px 20px;
-            border-radius: 25px;
-            border: 1px solid #333;
-            background: rgba(255,255,255,0.05);
-            color: white;
-            outline: none;
-            transition: 0.3s;
-        }
-        input[type="text"]:focus { border-color: var(--discord-blurple); box-shadow: 0 0 15px rgba(88, 101, 242, 0.3); }
+        .featured-card:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(88,101,242,0.2); }
 
-        /* GRID SYSTEM */
+        /* SERVER GRID */
+        .container { padding: 2rem 5%; }
+        .section-title { margin-bottom: 2rem; font-size: 1.5rem; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; }
+        
         .server-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-            padding: 0 10% 5rem;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
         }
 
-        /* SERVER CARDS */
-        .card {
+        /* WIDGET STYLING */
+        .server-item {
             background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 12px;
-            padding: 1.5rem;
-            transition: transform 0.2s ease, border-color 0.2s;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
+            padding: 10px;
+            border: 1px solid #2d2f35;
+            transition: 0.2s;
         }
+        .server-item:hover { border-color: var(--blurple); }
 
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: var(--discord-blurple);
-            background: rgba(255,255,255,0.08);
+        iframe { border: none; width: 100%; border-radius: 8px; }
+
+        /* ADD SERVER BUTTON */
+        .add-btn {
+            background: var(--blurple); color: white; padding: 10px 20px;
+            border-radius: 5px; text-decoration: none; font-weight: bold;
+            transition: 0.3s; cursor: pointer; border: none;
         }
+        .add-btn:hover { background: #4752c4; transform: translateY(-2px); }
 
-        .category {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            color: var(--accent);
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-
-        .card h3 { margin: 0.5rem 0; }
-        .card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem; }
-
-        .stats {
-            display: flex;
-            gap: 1rem;
-            font-size: 0.8rem;
-            color: #43b581; /* Discord Online Color */
-        }
-
-        /* BUTTONS */
-        .btn {
-            display: inline-block;
-            background: var(--discord-blurple);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: 0.3s;
-            text-align: center;
-        }
-
-        .btn:hover { filter: brightness(1.2); box-shadow: 0 4px 15px rgba(88,101,242,0.4); }
-
-        /* FOOTER */
-        footer {
-            text-align: center;
-            padding: 3rem;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            color: var(--text-muted);
-            font-size: 0.8rem;
-        }
+        footer { text-align: center; padding: 4rem; color: var(--muted); font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo">SERVERVAULT</div>
-        <div class="nav-links">
-            <a href="#" class="btn" style="padding: 8px 15px; font-size: 0.8rem;">+ Add Server</a>
-        </div>
+        <div class="logo">Discord Ads</div>
+        <button class="add-btn" onclick="addServerPrompt()">+ List Your Server</button>
     </nav>
 
-    <header>
-        <h1>Find Your Next Home.</h1>
-        <p>The fastest way to browse the best Discord communities. No lag, no bloat, just servers.</p>
+    <section class="hero">
+        <h1>Boost Your Community.</h1>
+        <p style="color: var(--muted); font-size: 1.2rem;">The most optimized directory for Discord growth.</p>
         
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Search by name, tag, or category..." onkeyup="filterServers()">
-        </div>
-    </header>
-
-    <main class="server-grid" id="serverGrid">
-        <div class="card" data-category="gaming">
-            <span class="category">Gaming</span>
-            <h3>The Nexus Hub</h3>
-            <p>Competitive Valorant & League community with weekly tournaments and active voice chats.</p>
-            <div class="stats">
-                <span>● 1,240 Online</span>
-                <span style="color: var(--text-muted);">👥 15k Members</span>
+        <div class="featured-card">
+            <iframe src="https://discord.com/widget?id=113456789012345678&theme=dark" width="100%" height="300" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts">
+            </iframe>
             </div>
-            <br>
-            <a href="#" class="btn">Join Server</a>
-        </div>
+        <a href="https://discord.gg/5ZDX8dp7" class="add-btn" style="font-size: 1.2rem; padding: 15px 40px;">Join Official Discord Ads</a>
+    </section>
 
-        <div class="card" data-category="coding">
-            <span class="category">Coding</span>
-            <h3>Dev Lounge</h3>
-            <p>A professional space for full-stack developers to share projects and get code reviews.</p>
-            <div class="stats">
-                <span>● 450 Online</span>
-                <span style="color: var(--text-muted);">👥 4k Members</span>
+    <div class="container">
+        <h2 class="section-title">Community Listings</h2>
+        <div class="server-grid" id="serverGrid">
             </div>
-            <br>
-            <a href="#" class="btn">Join Server</a>
-        </div>
-
-        <div class="card" data-category="chill">
-            <span class="category">Chill</span>
-            <h3>Midnight Cafe</h3>
-            <p>Lofi music, 24/7 chill vibes, and friendly people. The perfect place to hang out after work.</p>
-            <div class="stats">
-                <span>● 3,100 Online</span>
-                <span style="color: var(--text-muted);">👥 50k Members</span>
-            </div>
-            <br>
-            <a href="#" class="btn">Join Server</a>
-        </div>
-    </main>
+    </div>
 
     <footer>
-        &copy; 2026 ServerVault Hub. Optimized for performance.
+        &copy; 2026 Discord Ads. Running on high-performance architecture.
     </footer>
 
     <script>
-        /* INTERACTIVE SEARCH LOGIC */
-        function filterServers() {
-            let input = document.getElementById('searchInput').value.toLowerCase();
-            let cards = document.getElementsByClassName('card');
+        /**
+         * HOW TO ADD SERVERS:
+         * To get the "Auto-PFP" and "Auto-Description", we use the Discord Widget.
+         * You just need the Server ID (found in Server Settings > Widget).
+         */
+        function addServerToList(serverId) {
+            const grid = document.getElementById('serverGrid');
+            const wrapper = document.createElement('div');
+            wrapper.className = 'server-item';
+            
+            wrapper.innerHTML = `
+                <iframe src="https://discord.com/widget?id=${serverId}&theme=dark" 
+                        height="400" 
+                        allowtransparency="true" 
+                        frameborder="0" 
+                        sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts">
+                </iframe>
+            `;
+            grid.appendChild(wrapper);
+        }
 
-            for (let i = 0; i < cards.length; i++) {
-                let title = cards[i].getElementsByTagName('h3')[0].innerText.toLowerCase();
-                let desc = cards[i].getElementsByTagName('p')[0].innerText.toLowerCase();
-                let cat = cards[i].getAttribute('data-category').toLowerCase();
-
-                if (title.includes(input) || desc.includes(input) || cat.includes(input)) {
-                    cards[i].style.display = "";
-                } else {
-                    cards[i].style.display = "none";
-                }
+        function addServerPrompt() {
+            const id = prompt("Enter the Discord Server ID (Enable 'Widget' in Server Settings first!):");
+            if(id) {
+                addServerToList(id);
             }
         }
 
-        /* SUBTLE HOVER EFFECT FOR PERFORMANCE */
-        // We use CSS transitions instead of JS animations to keep it smooth on low-end PCs
+        // Example: Adding a few IDs to start (Replace these with real IDs)
+        // addServerToList('1234567890'); 
     </script>
 </body>
 </html>
